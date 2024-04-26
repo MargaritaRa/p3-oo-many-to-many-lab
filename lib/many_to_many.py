@@ -1,42 +1,40 @@
 class Author:
+    all_authors = []
+
     def __init__(self, name):
         self.name = name
-        self.author_contracts = []
-        self.author_books = []
+        Author.all_authors.append(self)
+    
 
     def contracts(self):
-        return self.author_contracts
+        return [contract for contract in Contract.all if contract.author == self]
 
     def books(self):
-        return self.author_books
+        return [contract.book for contract in Contract.all if contract.author == self]
     
     def sign_contract(self, book, date, royalties):
         new_contract = Contract(self, book, date, royalties)
-        self.author_contracts.append(new_contract)
+        self.all_authors.append(new_contract)
         return new_contract
 
     def total_royalties(self):
-        return sum(contract.royalties for contract in self.author_contracts)
+        return sum(contract.royalties for contract in self.contracts())
     
-
-
     
-
-
 
 class Book:
+    all_books = []
+
     def __init__(self, title):
         self.title = title
-        self.book_contracts = []
+        Book.all_books.append(self)
 
     def contracts(self):
-        return self.book_contracts
+        return [contract for contract in Contract.all if contract.book == self]
 
     def authors(self):
-        return [contract.author for contract in self.book_contracts]
-
+        return [contract.author for contract in self.contracts()]
         
-
 
 
 class Contract:
